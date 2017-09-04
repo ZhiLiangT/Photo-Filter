@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg1"
+    tools:context="com.tianzl.photofilter.MainActivity">
+   <LinearLayout
+       android:id="@+id/main_ll"
+       android:orientation="vertical"
+       android:layout_width="80dp"
+        android:background="@color/color_66_black"
+       android:layout_alignParentLeft="true"
+       android:layout_height="match_parent">
+       <ImageView
+           android:id="@+id/main_img_hue"
+           android:src="@mipmap/main_iv_1"
+           style="@style/Main_img_style" />
+       <ImageView
+           android:id="@+id/main_img_filter"
+           android:src="@mipmap/main_iv_2"
+           style="@style/Main_img_style" />
+       <ImageView
+           android:id="@+id/main_img_color"
+           android:src="@mipmap/custom"
+           style="@style/Main_img_style" />
+       <ImageView
+           android:id="@+id/main_img_paint"
+           android:src="@mipmap/main_iv_3"
+           style="@style/Main_img_style"/>
+       <ImageView
+           android:id="@+id/main_img_reduction"
+           android:src="@mipmap/reduction"
+           android:padding="8dp"
+           style="@style/Main_img_style"  />
+       <View
+           android:layout_weight="1"
+           android:layout_width="match_parent"
+           android:layout_height="0dp"/>
+       <ImageView
+           android:id="@+id/main_img_save"
+           android:src="@mipmap/save"
+           android:padding="9dp"
+           style="@style/Main_img_style" />
+       <ImageView
+           android:id="@+id/main_img_open"
+           android:src="@mipmap/open"
+           style="@style/Main_img_style" />
+   </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/main_rl_img"
+        android:layout_toRightOf="@id/main_ll"
+        android:layout_above="@+id/main_filter_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.tianzl.photofilter.custom.PaletteImageView
+            android:id="@+id/main_surface"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/main_tv_prompt"
+        android:text="暂未选择图片\n点击左下角添加图片。"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:lineSpacingExtra="10dp"
+        android:layout_toRightOf="@id/main_ll"
+        android:layout_above="@+id/main_filter_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/main_rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_toRightOf="@+id/main_ll"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:layout_height="90dp"
+        android:background="@color/color_66_black"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        >
+        <TextView
+            android:id="@+id/main_tv_saturation"
+            android:text="RED"
+            style="@style/main_hue_tv_number"
+            android:layout_alignParentRight="false"/>
+        <TextView
+            android:id="@+id/main_tv_hue"
+            android:layout_below="@+id/main_tv_saturation"
+            android:text="GREEN"
+            style="@style/main_hue_tv_number"
+            android:layout_alignParentRight="false"/>
+        <TextView
+            android:id="@+id/main_tv_brightness"
+            android:layout_below="@+id/main_tv_hue"
+            android:text="BLUE"
+            style="@style/main_hue_tv_number"
+            android:layout_alignParentRight="false"
+            />
+        <SeekBar
+            android:id="@+id/main_seek_saturation"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toLeftOf="@+id/main_hue_tv_red"
+            android:layout_toRightOf="@+id/main_tv_saturation"
+            />
+        <TextView
+            android:id="@+id/main_hue_tv_red"
+            style="@style/main_hue_tv_number"
+            android:text="50%"
+            />
+        <SeekBar
+            android:id="@+id/main_seek_hue"
+            android:layout_below="@+id/main_seek_saturation"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toLeftOf="@+id/main_hue_tv_green"
+            android:layout_toRightOf="@+id/main_tv_saturation"
+            />
+        <TextView
+            android:id="@+id/main_hue_tv_green"
+            style="@style/main_hue_tv_number"
+            android:layout_below="@+id/main_hue_tv_red"
+            android:text="50%"
+            />
+        <SeekBar
+            android:id="@+id/main_seek_brightness"
+            android:layout_below="@+id/main_seek_hue"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toLeftOf="@+id/main_hue_tv_blue"
+            android:layout_toRightOf="@+id/main_tv_saturation"
+            />
+        <TextView
+            android:id="@+id/main_hue_tv_blue"
+            style="@style/main_hue_tv_number"
+            android:layout_below="@+id/main_hue_tv_green"
+            android:text="50%"
+            />
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_filter_rv"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:visibility="invisible"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/color_66_black"
+        android:layout_width="match_parent"
+        android:layout_toRightOf="@+id/main_ll"
+        android:layout_alignParentBottom="true"
+        android:layout_height="100dp">
+
+    </android.support.v7.widget.RecyclerView>
+    <LinearLayout
+        android:layout_above="@+id/main_ll_palette"
+        android:layout_toRightOf="@+id/main_ll"
+        android:layout_marginRight="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/main_paint_size_rv"
+            android:visibility="invisible"
+            android:background="@color/color_66_black"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_ll_palette"
+        android:layout_toRightOf="@+id/main_ll"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/border_white"
+        android:layout_marginLeft="30dp"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_height="50dp">
+        <ImageButton
+            android:id="@+id/main_palette_back"
+            android:background="@android:color/transparent"
+            android:src="@drawable/palette_back"
+            style="@style/horizontal_mean" />
+        <View style="@style/vertical_divider_e3"/>
+        <ImageButton
+            android:id="@+id/main_palette_go"
+            android:background="@android:color/transparent"
+            android:src="@drawable/palette_go"
+            style="@style/horizontal_mean" />
+        <View style="@style/vertical_divider_e3"/>
+        <ImageButton
+            android:id="@+id/main_palette_paint"
+            android:background="@android:color/transparent"
+            android:src="@drawable/palette_paint"
+            style="@style/horizontal_mean" />
+        <View style="@style/vertical_divider_e3"/>
+        <ImageButton
+            android:id="@+id/main_palette_eraser"
+            android:background="@android:color/transparent"
+            android:src="@drawable/palette_eraser"
+            style="@style/horizontal_mean" />
+        <View style="@style/vertical_divider_e3"/>
+        <ImageButton
+            android:id="@+id/main_palette_paint_color"
+            android:background="@android:color/transparent"
+            android:src="@drawable/palette_paint_color"
+            style="@style/horizontal_mean" />
+        <View style="@style/vertical_divider_e3"/>
+        <ImageButton
+            android:id="@+id/main_palette_paint_size"
+            android:background="@android:color/transparent"
+            android:src="@drawable/palette_paint_size"
+            style="@style/horizontal_mean" />
+        <View style="@style/vertical_divider_e3"/>
+    </LinearLayout>
+</RelativeLayout>

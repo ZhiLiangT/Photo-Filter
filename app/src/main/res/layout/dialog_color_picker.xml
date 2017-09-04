@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <include
+        android:id="@+id/dialog_color_picker_title"
+        android:layout_height="50dp"
+        layout="@layout/title_bar"
+        android:layout_width="match_parent" />
+    <View
+        android:layout_below="@+id/dialog_color_picker_title"
+        style="@style/horizontal_divider_e3"/>
+    <com.larswerkman.holocolorpicker.ColorPicker
+        android:id="@+id/dialog_color_picker_colorPicker"
+        android:layout_below="@+id/dialog_color_picker_title"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/dialog_color_picker_tv_sv"
+        android:text="@string/color_depth"
+        android:layout_below="@+id/dialog_color_picker_colorPicker"
+        android:gravity="center_vertical"
+        android:layout_width="100dp"
+        android:layout_height="30dp" />
+    <com.larswerkman.holocolorpicker.SVBar
+        android:id="@+id/dialog_color_picker_svbar"
+        android:layout_toRightOf="@+id/dialog_color_picker_tv_sv"
+        android:layout_below="@+id/dialog_color_picker_colorPicker"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"/>
+    <TextView
+        android:id="@+id/dialog_color_picker_tv_opacity"
+        android:text="@string/transparency"
+        android:layout_below="@+id/dialog_color_picker_svbar"
+        android:gravity="center_vertical"
+        android:layout_width="100dp"
+        android:layout_height="30dp" />
+    <com.larswerkman.holocolorpicker.OpacityBar
+        android:id="@+id/dialog_color_picker_opacity"
+        android:layout_toRightOf="@+id/dialog_color_picker_tv_opacity"
+        android:layout_below="@+id/dialog_color_picker_svbar"
+        android:layout_width="match_parent"
+
+        android:layout_height="30dp"/>
+    <TextView
+        android:id="@+id/dialog_color_picker_examples"
+        android:text="@string/examples_text"
+        android:textSize="40dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/dialog_color_picker_opacity"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>

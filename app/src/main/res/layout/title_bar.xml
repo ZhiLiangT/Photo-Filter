@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
+    <ImageButton
+        android:id="@+id/bar_title_left"
+        android:src="@mipmap/back_1"
+        android:background="@android:color/transparent"
+        style="@style/horizontal_mean" />
+    <TextView
+        android:id="@+id/bar_title_title"
+        android:text="@string/dialog_folder_title"
+        android:gravity="center"
+        android:textSize="20sp"
+        style="@style/horizontal_mean"
+        android:layout_weight="5"/>
+    <ImageButton
+        android:id="@+id/bar_title_right"
+        android:src="@mipmap/ensure"
+        android:background="@android:color/transparent"
+        style="@style/horizontal_mean" />
+</LinearLayout>

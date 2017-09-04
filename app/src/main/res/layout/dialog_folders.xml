@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="400dp">
+    <include
+        android:id="@+id/dialog_folder_title"
+        layout="@layout/title_bar"/>
+    <TextView
+        android:id="@+id/dialog_folder_tv"
+        android:text="当前路径:"
+        android:paddingLeft="15dp"
+        android:textSize="20sp"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/dialog_folder_title"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp" />
+    <TextView
+        android:id="@+id/dialog_folder_current_path"
+        android:layout_below="@+id/dialog_folder_title"
+        android:layout_toRightOf="@+id/dialog_folder_tv"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/dialog_folder_rv"
+        android:layout_below="@+id/dialog_folder_current_path"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <LinearLayout
+        android:id="@+id/loading_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/dialog_folder_current_path"
+        android:orientation="vertical">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyle" />
+    </LinearLayout>
+
+</RelativeLayout>

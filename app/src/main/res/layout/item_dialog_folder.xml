@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+    <ImageView
+        android:id="@+id/item_dialog_folder_icon"
+        android:src="@mipmap/folders"
+        android:layout_width="60dp"
+        android:scaleType="centerCrop"
+        android:layout_height="match_parent" />
+    <TextView
+        android:id="@+id/item_dialog_folder_name"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+    <View style="@style/horizontal_mean"/>
+    <ImageView
+        android:scaleType="centerCrop"
+        android:layout_width="60dp"
+        android:padding="10dp"
+        android:src="@mipmap/go"
+        android:layout_height="match_parent" />
+</LinearLayout>

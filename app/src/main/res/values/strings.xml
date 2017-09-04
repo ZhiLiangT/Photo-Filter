@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Photo Filter</string>
+    <string name="dialog_folder_title">文件管理</string>
+    <string name="dialog_folder_up">上一级</string>
+    <string name="dialog_folder_confirm">确定</string>
+    <string name="dialog_color_title">颜色选择器</string>
+    <string name="color_depth">颜色深度</string>
+    <string name="transparency">透明度</string>
+    <string name="examples_text">示例文本</string>
+</resources>
