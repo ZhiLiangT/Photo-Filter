@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements
     private ImageButton[] ibs=new ImageButton[6];           //画板模块按钮
     private int bitmapWidth;                                //原图的宽
     private int bitmapHeight;                               //原图的高
+    private int paintColor;                                 //画笔颜色
 
 
     @Override
@@ -226,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements
                 isShowModule(Constants.SHOW_FILTER);
                 break;
             case R.id.main_img_reduction:
+                surfaceView.setImageBitmap(mBitmap);
                 break;
             /**画板模块功能点击事件*/
             case R.id.main_palette_back:
@@ -241,12 +243,19 @@ public class MainActivity extends AppCompatActivity implements
                 //使用画笔，打开开关
                 showPalete(2);
                 surfaceView.setMode(PaletteImageView.Mode.DRAW);
+                ibPaintColor.setClickable(true);
+                if (paintColor==0){
+                    surfaceView.setColor(Color.BLACK);
+                }
+                surfaceView.setColor(paintColor);
                 surfaceView.setSwitch(true);
                 break;
             case R.id.main_palette_eraser:
                 //使用橡皮擦
                 showPalete(3);
-                surfaceView.setMode(PaletteImageView.Mode.ERASER);
+                surfaceView.setColor(Color.WHITE);
+                ibPaintColor.setClickable(false);
+                //surfaceView.setMode(PaletteImageView.Mode.ERASER);
                 break;
             case R.id.main_palette_paint_color:
                 //选择画笔颜色
@@ -274,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements
                     surfaceView.setColor(Color.BLACK);
                 }
                 surfaceView.setColor(color);
+                paintColor=color;
             }
             @Override
             public void onBack() {
