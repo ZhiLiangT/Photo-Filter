@@ -42,4 +42,10 @@ https://github.com/CyberAgent/android-gpuimage
 
 ![文件夹选择器](https://github.com/ZhiLiangT/Photo-Filter/raw/master/img/photo_filter_1.png "首页")<br>
 
+## 生成图片
+
+可以看到本地已经保存了我们操作过的图片。
+
+![文件夹选择器](https://github.com/ZhiLiangT/Photo-Filter/raw/master/img/photo_filter_7.png "首页")<br>
+
 以上就是所有的功能
