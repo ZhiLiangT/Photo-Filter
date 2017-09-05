@@ -109,7 +109,9 @@ public class MainActivity extends AppCompatActivity implements
         adapter.setOnItemClickListener(new FilterAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(FilterBeen been) {
-                FilterUtils.imageViewColorFilter(surfaceView, been.getFilters());
+                if (mBitmap!=null){
+                    FilterUtils.imageViewColorFilter(surfaceView, been.getFilters());
+                }
             }
         });
         //画笔粗细item点击事件
@@ -369,12 +371,15 @@ public class MainActivity extends AppCompatActivity implements
      * 将bitmap重新绘制到ImageView上
      */
     public Bitmap setBitmap() {
-        Bitmap bit = surfaceView.buildBitmap();
-        surfaceView.clearColorFilter();
-        surfaceView.setImageBitmap(bit);
-        surfaceView.setSwitch(false);
-        surfaceView.clear();
-        return bit;
+        if (mBitmap!=null){
+            Bitmap bit = surfaceView.buildBitmap();
+            surfaceView.clearColorFilter();
+            surfaceView.setImageBitmap(bit);
+            surfaceView.setSwitch(false);
+            surfaceView.clear();
+            return bit;
+        }
+       return null;
     }
 
     /**

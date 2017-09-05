@@ -1,5 +1,6 @@
 package com.tianzl.photofilter.dialog;
 
+import android.graphics.Color;
 import android.os.Bundle;
         import android.support.annotation.Nullable;
         import android.support.v4.app.DialogFragment;
@@ -72,6 +73,9 @@ public class ColorPickerDialog extends DialogFragment {
         ibEnsure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (color==0){
+                    color=Color.BLACK;
+                }
                 listener.onEnsure(color);
                 dismiss();
             }
