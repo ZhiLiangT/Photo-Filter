@@ -12,12 +12,17 @@ import android.graphics.Xfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.facebook.drawee.view.SimpleDraweeView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by tianzl on 2017/8/31.
  */
 
-public class PaletteImageView extends android.support.v7.widget.AppCompatImageView {
+public class PaletteImageView extends SimpleDraweeView {
 
     private float mLastX;
     private float mLastY;
@@ -30,6 +35,12 @@ public class PaletteImageView extends android.support.v7.widget.AppCompatImageVi
     private Canvas canvas;
     private Xfermode xfermode;
     private boolean isSwitch;
+    private static final int MAX_CACHE_STEP = 20;
+    private PaletteView.Callback mCallback;
+    private boolean mCanEraser;
+    private List<DrawingInfo> mDrawingList;
+    private List<DrawingInfo> mRemovedList;
+
     public enum Mode {
         DRAW,
         ERASER
@@ -161,11 +172,99 @@ public class PaletteImageView extends android.support.v7.widget.AppCompatImageVi
                 break;
             case MotionEvent.ACTION_UP:
                 if (mMode == Mode.DRAW ) {
+                    saveDrawingPath();
                 }
                 mPath.reset();
                 break;
         }
         return true;
+    }
+    //保存绘制路径
+    private void saveDrawingPath(){
+        if (mDrawingList == null) {
+            mDrawingList = new ArrayList<>(MAX_CACHE_STEP);
+        } else if (mDrawingList.size() == MAX_CACHE_STEP) {
+            mDrawingList.remove(0);
+        }
+        Path cachePath = new Path(mPath);
+        Paint cachePaint = new Paint(paint);
+        PathDrawingInfo info = new PathDrawingInfo();
+        info.path = cachePath;
+        info.paint = cachePaint;
+        mDrawingList.add(info);
+        mCanEraser = true;
+        if (mCallback != null) {
+            mCallback.onUndoRedoStatusChanged();
+        }
+    }
+    private abstract static class DrawingInfo {
+        Paint paint;
+        abstract void draw(Canvas canvas);
+    }
+    public void clearList(){
+        if (mDrawingList!=null){
+            mDrawingList.clear();
+        }
+        if (mRemovedList!=null){
+            mRemovedList.clear();
+        }
+    }
+
+    // 撤销
+    public void undo() {
+        int size = mDrawingList == null ? 0 : mDrawingList.size();
+        if (size > 0) {
+            DrawingInfo info = mDrawingList.remove(size - 1);
+            if (mRemovedList == null) {
+                mRemovedList = new ArrayList<>(MAX_CACHE_STEP);
+            }
+            if (size == 1) {
+                mCanEraser = false;
+            }
+            mRemovedList.add(info);
+            reDraw();
+            if (mCallback != null) {
+                mCallback.onUndoRedoStatusChanged();
+            }
+        }
+    }
+    //反撤销
+    public void redo() {
+        int size = mRemovedList == null ? 0 : mRemovedList.size();
+        if (size > 0) {
+            DrawingInfo info = mRemovedList.remove(size - 1);
+            mDrawingList.add(info);
+            mCanEraser = true;
+            reDraw();
+            if (mCallback != null) {
+                mCallback.onUndoRedoStatusChanged();
+            }
+        }
+    }
+    private void reDraw(){
+        if (mDrawingList != null) {
+            mBufferBitmap.eraseColor(Color.TRANSPARENT);
+            for (DrawingInfo drawingInfo : mDrawingList) {
+                drawingInfo.draw(canvas);
+            }
+            invalidate();
+        }
+    }
+    private static class PathDrawingInfo extends DrawingInfo {
+
+        Path path;
+        @Override
+        void draw(Canvas canvas) {
+            canvas.drawPath(path, paint);
+        }
+    }
+
+    public interface Callback {
+        void onUndoRedoStatusChanged();
+    }
+
+    public void setCallback(PaletteView.Callback callback){
+        mCallback = callback;
     }
 
 }

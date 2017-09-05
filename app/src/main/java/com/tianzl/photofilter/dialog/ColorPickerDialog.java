@@ -1,19 +1,19 @@
 package com.tianzl.photofilter.dialog;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ImageButton;
-import android.widget.TextView;
+        import android.support.annotation.Nullable;
+        import android.support.v4.app.DialogFragment;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.view.Window;
+        import android.widget.ImageButton;
+        import android.widget.TextView;
 
-import com.larswerkman.holocolorpicker.ColorPicker;
-import com.larswerkman.holocolorpicker.OpacityBar;
-import com.larswerkman.holocolorpicker.SVBar;
-import com.tianzl.photofilter.R;
+        import com.larswerkman.holocolorpicker.ColorPicker;
+        import com.larswerkman.holocolorpicker.OpacityBar;
+        import com.larswerkman.holocolorpicker.SVBar;
+        import com.tianzl.photofilter.R;
 
 /**
  * 颜色选择器Dialog

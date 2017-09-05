@@ -1,6 +1,8 @@
 package com.tianzl.photofilter.utisl;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -86,6 +88,33 @@ public class ViewUtils {
         styledText.setSpan(new TextAppearanceSpan(context, start), 0, content.indexOf(fenge)+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         styledText.setSpan(new TextAppearanceSpan(context, end), content.indexOf(fenge)+1, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         textView.setText(styledText, TextView.BufferType.SPANNABLE);
+    }
+    //弹出一个普通的Dialog
+    public static void showDialgo(Context context, String title, String content, final CallBack callback){
+        final AlertDialog.Builder normalDialog=new AlertDialog.Builder(context);
+        normalDialog.setTitle(title);
+        normalDialog.setMessage(content);
+        normalDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                callback.onConfirm();
+            }
+        });
+        normalDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        normalDialog.show();
+    }
+    public interface CallBack{
+        void onConfirm();
+    }
+    private static CallBack callBack;
+
+    public void setOnConfirm(CallBack callBack){
+        this.callBack=callBack;
     }
 
 }

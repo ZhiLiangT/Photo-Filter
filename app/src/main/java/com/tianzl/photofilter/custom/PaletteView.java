@@ -91,9 +91,7 @@ public class PaletteView extends android.support.v7.widget.AppCompatImageView {
     }
 
     private static class PathDrawingInfo extends DrawingInfo{
-
         Path path;
-
         @Override
         void draw(Canvas canvas) {
             canvas.drawPath(path, paint);
