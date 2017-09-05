@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg1"
+
     tools:context="com.tianzl.photofilter.MainActivity">
    <LinearLayout
        android:id="@+id/main_ll"
@@ -47,6 +48,9 @@
            android:src="@mipmap/open"
            style="@style/Main_img_style" />
    </LinearLayout>
+    <View
+        android:layout_toRightOf="@+id/main_ll"
+        style="@style/vertical_divider_e3"/>
     <!--<RelativeLayout-->
         <!--android:id="@+id/main_rl_img"-->
         <!--android:layout_toRightOf="@id/main_ll"-->
@@ -57,16 +61,12 @@
         <com.tianzl.photofilter.custom.PaletteImageView
             android:id="@+id/main_surface"
             android:layout_centerInParent="true"
-            android:scaleType="centerCrop"
             android:layout_toRightOf="@id/main_ll"
             android:layout_above="@+id/main_filter_rv"
             android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-
-
-
     <TextView
         android:id="@+id/main_tv_prompt"
         android:text="暂未选择图片\n点击左下角添加图片。"

@@ -81,11 +81,11 @@ public class MainActivity extends AppCompatActivity implements
     private float redValue = 1f, greenValue = 1f, blueValue = 1f;   //RGB色调初始值
     private int newPalettePosition = 0;                       //画板模块上次点击的位置
     private ImageButton[] ibs = new ImageButton[6];           //画板模块按钮
-    private int bitmapWidth;                                //原图的宽
-    private int bitmapHeight;                               //原图的高
     private int paintColor;                                 //画笔颜色
-    private Bitmap copy;
-
+    private Bitmap copy;                                    //copy的bitmap
+    private String path;                                    //图片地址
+    private int requestWidth;                               //图片宽度
+    private int requestHeight;                              //图片高度
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,15 +200,7 @@ public class MainActivity extends AppCompatActivity implements
         ibPaintSize.setOnClickListener(this);
     }
 
-    //初始化
-    public void initialization() {
-        setYuan();
-        surfaceView.clear();
-        surfaceView.setSize(5);
-        surfaceView.setMode(PaletteImageView.Mode.DRAW);
-        surfaceView.setColor(Color.BLACK);
-        FilterUtils.imageViewColorFilter(surfaceView, DataUtils.colormatrix_original);
-    }
+
 
     @Override
     public void onClick(View view) {
@@ -294,14 +286,16 @@ public class MainActivity extends AppCompatActivity implements
     //初始化
     public void imgInit() {
         //初始化
+        if (copy != null) {
+            BitmapUtils.destroyBitmap(copy);
+        }
         surfaceView.clear();
         surfaceView.clearList();
         setYuan();
+        mBitmap=getYuanBitmap(path,requestWidth,requestHeight);
         surfaceView.setImageBitmap(mBitmap);
         FilterUtils.imageViewColorFilter(surfaceView, DataUtils.colormatrix_original);
-        if (copy != null) {
 
-        }
     }
 
     /**
@@ -355,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements
                 rgbLayout.setVisibility(View.VISIBLE);
                 break;
             case Constants.SHOW_FILTER:
-                setBitmap();
+                copy= setBitmap();
                 llPalette.setVisibility(View.INVISIBLE);
                 rvfilter.setVisibility(View.VISIBLE);
                 rgbLayout.setVisibility(View.INVISIBLE);
@@ -374,15 +368,13 @@ public class MainActivity extends AppCompatActivity implements
      * 将bitmap重新绘制到ImageView上
      */
     public Bitmap setBitmap() {
-        if (mBitmap!=null){
-            Bitmap bit = surfaceView.buildBitmap();
-            surfaceView.clearColorFilter();
-            surfaceView.setImageBitmap(bit);
-            surfaceView.setSwitch(false);
-            surfaceView.clear();
-            return bit;
-        }
-       return null;
+        Bitmap bit = surfaceView.buildBitmap();
+        BitmapUtils.destroyBitmap(copy);
+        surfaceView.clearColorFilter();
+        surfaceView.setImageBitmap(bit);
+        surfaceView.setSwitch(false);
+        surfaceView.clear();
+        return bit;
     }
 
     /**
@@ -394,6 +386,7 @@ public class MainActivity extends AppCompatActivity implements
         dialogFragment.setOnItemClick(new GridDialogFragment.OnItemClick() {
             @Override
             public void OnItem(FilterInfo filterInfo) {
+                BitmapUtils.destroyBitmap(copy);
                 copy = setBitmap();
                 if (copy != null) {
                     gpuImage.setImage(copy);
@@ -436,7 +429,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         });
-
     }
 
     /**
@@ -462,26 +454,45 @@ public class MainActivity extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
-            BitmapUtils.destroyBitmap(copy);
             Uri uri = data.getData();
-            String path= UriUtils.getRealPathFromUri(this,uri);
-            int requestWidth = surfaceView.getWidth();
-            int requestHeight = surfaceView.getHeight();
-            Log.d(TAG,"requestWidth: "+requestWidth);
-            Log.d(TAG,"requestHeight: "+requestHeight);
-            Log.d(TAG,"path: "+path);
-           // mBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-            mBitmap= BitmapUtils.getFileSimpleBitmap(path,requestWidth,requestHeight);
+            path= UriUtils.getRealPathFromUri(this,uri);
+            requestWidth = surfaceView.getWidth();
+            requestHeight = surfaceView.getHeight();
+            mBitmap=getYuanBitmap(path,requestWidth,requestHeight);
             copy = mBitmap.copy(Bitmap.Config.RGB_565, true);
-            bitmapWidth = copy.getWidth();
-            bitmapHeight = copy.getHeight();
             surfaceView.clearList();
             surfaceView.setVisibility(View.VISIBLE);
             surfaceView.setImageBitmap(copy);
             tvPrompt.setVisibility(View.INVISIBLE);
+            BitmapUtils.destroyBitmap(mBitmap);
         }
     }
+    public Bitmap getYuanBitmap(String path,int width,int height){
+        return BitmapUtils.getFileSimpleBitmap(path,width,height);
+    }
+    //初始化
+    public void initialization() {
+        setYuan();
+        surfaceView.clear();
+        //回收bitmap
+        if (copy!=null){
+            Log.e(TAG,"回收 copy bitmap");
+            BitmapUtils.destroyBitmap(copy);
+        }
+        if (copyBitmap!=null){
+            Log.e(TAG,"回收 copyBitmap bitmap");
+            BitmapUtils.destroyBitmap(copyBitmap);
+        }
+        if (mBitmap!=null){
+            Log.e(TAG,"回收 mBitmap bitmap");
+            BitmapUtils.destroyBitmap(mBitmap);
+        }
 
+        surfaceView.setSize(5);
+        surfaceView.setMode(PaletteImageView.Mode.DRAW);
+        surfaceView.setColor(Color.BLACK);
+        FilterUtils.imageViewColorFilter(surfaceView, DataUtils.colormatrix_original);
+    }
 
     /**
      * 设置 SeekBar 的初始值

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="70dp"
     android:layout_margin="5dp"
     android:layout_height="90dp">
-    <ImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/item_filer_icon"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/test1"
+        fresco:actualImageScaleType="fitXY"
         android:layout_width="70dp"
         android:layout_height="70dp" />
     <TextView
