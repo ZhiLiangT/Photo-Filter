@@ -47,21 +47,24 @@
            android:src="@mipmap/open"
            style="@style/Main_img_style" />
    </LinearLayout>
-    <RelativeLayout
-        android:id="@+id/main_rl_img"
-        android:layout_toRightOf="@id/main_ll"
-        android:layout_above="@+id/main_filter_rv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/main_rl_img"-->
+        <!--android:layout_toRightOf="@id/main_ll"-->
+        <!--android:layout_above="@+id/main_filter_rv"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+    <!--</RelativeLayout>-->
         <com.tianzl.photofilter.custom.PaletteImageView
             android:id="@+id/main_surface"
             android:layout_centerInParent="true"
             android:scaleType="centerCrop"
-            android:visibility="gone"
+            android:layout_toRightOf="@id/main_ll"
+            android:layout_above="@+id/main_filter_rv"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-    </RelativeLayout>
+
 
 
     <TextView

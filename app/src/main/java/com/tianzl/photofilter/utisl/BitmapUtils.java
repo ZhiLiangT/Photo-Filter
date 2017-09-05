@@ -1,6 +1,8 @@
 package com.tianzl.photofilter.utisl;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -8,6 +10,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.ImageView;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 /**
  * Created by Martin on 2016/7/20.
@@ -176,5 +181,60 @@ public class BitmapUtils {
             }
         }
     }
+    public static Bitmap getFileSimpleBitmap(String file_path, int width, int height){
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        //设置为true表示decode函数不会生成bitmap对象，仅是将图像的现相关参数填充到options对象里，
+        //这样我们就可以在不生成bitmap而获取到图像的相关参数了。
+        options.inJustDecodeBounds=true;
+        BitmapFactory.decodeFile(file_path,options);
+        //inSampleSize:表示对图像像素的缩放比例，假设为2，表示decode还有的图像的像素为原图像的1/2
+        options.inSampleSize=getFileSimpleSize(width,height,options);
+        //在设置options的inSampleSize后我们将inJustDecodeBounds设置为false，再次调用就可生成bitmap了
+        options.inJustDecodeBounds=false;
+        return BitmapFactory.decodeFile(file_path,options);
+    }
+    public static Bitmap getFileSimpleBitmap(Resources resources, int redId, int width, int height){
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inJustDecodeBounds=true;
+        BitmapFactory.decodeResource(resources,redId);
+        options.inSampleSize=getFileSimpleSize(width,height,options);
+        options.inJustDecodeBounds=false;
+        return BitmapFactory.decodeResource(resources,redId,options);
+    }
 
+    private static int getFileSimpleSize(int width, int height, BitmapFactory.Options options) {
+        int inSimpleSize=1;
+        if (options.outWidth>width||options.outHeight>height){
+            int widthRadio=Math.round(options.outWidth/width);
+            int heightRadio=Math.round(options.outHeight/height);
+            inSimpleSize=Math.min(widthRadio,heightRadio);
+        }
+        return inSimpleSize;
+    }
+    public static Bitmap getFitSampleBitmap(InputStream inputStream, int width, int height) throws Exception {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        byte[] bytes = readStream(inputStream);
+        //BitmapFactory.decodeStream(inputStream, null, options);
+        BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+        options.inSampleSize = getFileSimpleSize(width, height, options);
+        options.inJustDecodeBounds = false;
+//        return BitmapFactory.decodeStream(inputStream, null, options);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+    }
+
+    /*
+     * 从inputStream中获取字节流 数组大小
+    * */
+    public static byte[] readStream(InputStream inStream) throws Exception {
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        while ((len = inStream.read(buffer)) != -1) {
+            outStream.write(buffer, 0, len);
+        }
+        outStream.close();
+        inStream.close();
+        return outStream.toByteArray();
+    }
 }

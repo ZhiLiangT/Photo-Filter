@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -36,10 +37,12 @@ import com.tianzl.photofilter.custom.PaletteImageView;
 import com.tianzl.photofilter.dialog.ColorPickerDialog;
 import com.tianzl.photofilter.dialog.FoldersDialogFragment;
 import com.tianzl.photofilter.dialog.GridDialogFragment;
+import com.tianzl.photofilter.utisl.BitmapUtils;
 import com.tianzl.photofilter.utisl.Constants;
 import com.tianzl.photofilter.utisl.DataUtils;
 import com.tianzl.photofilter.utisl.FilterUtils;
 import com.tianzl.photofilter.utisl.TimeUtils;
+import com.tianzl.photofilter.utisl.UriUtils;
 import com.tianzl.photofilter.utisl.ViewUtils;
 
 
@@ -459,21 +462,26 @@ public class MainActivity extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
+            BitmapUtils.destroyBitmap(copy);
             Uri uri = data.getData();
-            try {
-                mBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-                copy = mBitmap.copy(Bitmap.Config.RGB_565, true);
-                bitmapWidth = copy.getWidth();
-                bitmapHeight = copy.getHeight();
-                surfaceView.clearList();
-                surfaceView.setVisibility(View.VISIBLE);
-                surfaceView.setImageBitmap(copy);
-                tvPrompt.setVisibility(View.INVISIBLE);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            String path= UriUtils.getRealPathFromUri(this,uri);
+            int requestWidth = surfaceView.getWidth();
+            int requestHeight = surfaceView.getHeight();
+            Log.d(TAG,"requestWidth: "+requestWidth);
+            Log.d(TAG,"requestHeight: "+requestHeight);
+            Log.d(TAG,"path: "+path);
+           // mBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+            mBitmap= BitmapUtils.getFileSimpleBitmap(path,requestWidth,requestHeight);
+            copy = mBitmap.copy(Bitmap.Config.RGB_565, true);
+            bitmapWidth = copy.getWidth();
+            bitmapHeight = copy.getHeight();
+            surfaceView.clearList();
+            surfaceView.setVisibility(View.VISIBLE);
+            surfaceView.setImageBitmap(copy);
+            tvPrompt.setVisibility(View.INVISIBLE);
         }
     }
+
 
     /**
      * 设置 SeekBar 的初始值
@@ -538,22 +546,5 @@ public class MainActivity extends AppCompatActivity implements
         paint.setColorFilter(colorFilter);//并把该过滤器设置给画笔
         canvas.drawBitmap(copy, new Matrix(), paint);//传如baseBitmap表示按照原图样式开始绘制，将得到是复制后的图片
         surfaceView.setImageBitmap(copyBitmap);
-    }
-
-    /**
-     * 以最省内存的方式读取本地资源的图片
-     *
-     * @param context
-     * @param resId
-     * @return
-     */
-    public static Bitmap readBitMap(Context context, int resId) {
-        BitmapFactory.Options opt = new BitmapFactory.Options();
-        opt.inPreferredConfig = Bitmap.Config.RGB_565;
-        opt.inPurgeable = true;
-        opt.inInputShareable = true;
-        //获取资源图片
-        InputStream is = context.getResources().openRawResource(resId);
-        return BitmapFactory.decodeStream(is, null, opt);
     }
 }
