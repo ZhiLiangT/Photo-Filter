@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements
                 //初始化为原图
                 ViewUtils.showDialgo(this,
                         "提示",
-                        "点击确定后进行初始化，\n重置为原图，之前操作不保存",
+                        "点击确定后进行初始化，重置为原图，之前操作不保存",
                         new ViewUtils.CallBack() {
                     @Override
                     public void onConfirm() {
