@@ -36,14 +36,19 @@ import com.tianzl.photofilter.adapter.FilterAdapter;
 import com.tianzl.photofilter.adapter.PaintSizeAdapter;
 import com.tianzl.photofilter.been.FilterBeen;
 import com.tianzl.photofilter.been.FilterInfo;
+import com.tianzl.photofilter.been.TextInfo;
+import com.tianzl.photofilter.custom.MoveTextView;
 import com.tianzl.photofilter.custom.PaletteImageView;
 import com.tianzl.photofilter.dialog.ColorPickerDialog;
 import com.tianzl.photofilter.dialog.FoldersDialogFragment;
 import com.tianzl.photofilter.dialog.GridDialogFragment;
+import com.tianzl.photofilter.dialog.InsertTextDialog;
 import com.tianzl.photofilter.utisl.BitmapUtils;
 import com.tianzl.photofilter.utisl.Constants;
 import com.tianzl.photofilter.utisl.DataUtils;
+import com.tianzl.photofilter.utisl.DisplayUtils;
 import com.tianzl.photofilter.utisl.FilterUtils;
+import com.tianzl.photofilter.utisl.ImageUtil;
 import com.tianzl.photofilter.utisl.TimeUtils;
 import com.tianzl.photofilter.utisl.UriUtils;
 import com.tianzl.photofilter.utisl.ViewUtils;
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private final String TAG = this.getClass().getSimpleName();
     private RelativeLayout rlRoot;
+    private MoveTextView tvInsert;                                                       //添加的文字
     private ImageView ivSave, ivOpen;                                                    //打开图库和保存图片
     private ImageView ivHue, ivFilter, ivPaint, ivColor, ivSize;                         //功能模块按钮
     private ImageButton ibBack, ibGo, ibPaint, ibEraser, ibPaintColor, ibPaintSize;      //画板模块按钮
@@ -91,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements
     private int requestHeight;                                      //图片高度
     private int rootWidth;
     private int rootHeight;
+    private TextInfo textInfo;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -172,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements
      * 初始化View
      */
     private void initView() {
+        tvInsert= (MoveTextView) findViewById(R.id.main_insert_text);
         rlRoot= (RelativeLayout) findViewById(R.id.main_root);
         rvPaintSize = (RecyclerView) findViewById(R.id.main_paint_size_rv);
         tvHueRed = (TextView) findViewById(R.id.main_hue_tv_red);
@@ -230,8 +238,10 @@ public class MainActivity extends AppCompatActivity implements
                 isShowModule(Constants.SHOW_HUE);
                 break;
             case R.id.main_img_filter:
+                //添加文字
+                insertText();
                 //打开框架提供的滤镜 dialog形式
-                OpenFilterList();
+                //OpenFilterList();
                 break;
             case R.id.main_img_paint:
                 //显示画板模块，默认显示画笔开启
@@ -376,6 +386,7 @@ public class MainActivity extends AppCompatActivity implements
                 rgbLayout.setVisibility(View.INVISIBLE);
                 break;
         }
+        drawText();
         rvPaintSize.setVisibility(View.INVISIBLE);
     }
 
@@ -390,6 +401,37 @@ public class MainActivity extends AppCompatActivity implements
         surfaceView.setSwitch(false);
         surfaceView.clear();
         return bit;
+    }
+
+    /**
+     * 添加文字
+     */
+    public void insertText(){
+        tvInsert.setScreen(requestWidth,requestHeight);
+        InsertTextDialog dialog=new InsertTextDialog();
+        dialog.show(getSupportFragmentManager(),"dialog_insert_text");
+        dialog.setOnClickListener(new InsertTextDialog.OnClickListener() {
+            @Override
+            public void onClick(TextInfo text) {
+                if (mBitmap!=null){
+                    textInfo=text;
+                    tvInsert.setText( textInfo.getContent());
+                    tvInsert.setTextSize( textInfo.getTvSize());
+                    tvInsert.setTextColor(textInfo.getTvColor());
+                }
+            }
+        });
+    }
+    public void drawText(){
+        if (textInfo!=null){
+            float x=tvInsert.getX();
+            float y=tvInsert.getY()+tvInsert.getHeight();
+            int spSize= DisplayUtils.spTopx(this,textInfo.getTvSize());
+            surfaceView.drawText(textInfo.getContent(),spSize
+                    ,textInfo.getTvColor(),x,y);
+            tvInsert.setText("");
+            textInfo=null;
+        }
     }
 
     /**

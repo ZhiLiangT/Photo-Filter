@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/dialog_insert_text_title"
+        android:layout_height="40dp"
+        layout="@layout/title_bar"
+        android:layout_width="match_parent" />
+    <View
+        android:layout_below="@+id/dialog_insert_text_title"
+        style="@style/horizontal_divider_e3"/>
+    <TextView
+        android:id="@+id/dialog_insert_text_tv"
+        android:text="添加的文字"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/dialog_insert_text_title"
+        android:layout_width="80dp"
+        android:layout_height="30dp" />
+    <EditText
+        android:id="@+id/dialog_insert_text_et"
+        android:layout_toRightOf="@+id/dialog_insert_text_tv"
+        android:layout_below="@+id/dialog_insert_text_title"
+        android:gravity="center_vertical"
+        android:background="@null"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="190dp"
+        android:layout_height="30dp" />
+    <TextView
+        android:id="@+id/dialog_insert_text_tvsize"
+        android:text="文字的大小"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/dialog_insert_text_et"
+        android:layout_width="80dp"
+        android:layout_height="30dp" />
+    <SeekBar
+        android:id="@+id/dialog_insert_text_seekbar_tvsize"
+        android:layout_toRightOf="@+id/dialog_insert_text_tvsize"
+        android:layout_alignTop="@+id/dialog_insert_text_tvsize"
+        android:layout_width="160dp"
+        android:layout_height="30dp" />
+    <TextView
+        android:id="@+id/dialog_insert_text_seekbar_tv_size"
+        android:text="25"
+        android:gravity="center"
+        android:layout_toRightOf="@+id/dialog_insert_text_seekbar_tvsize"
+        android:layout_alignTop="@+id/dialog_insert_text_seekbar_tvsize"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+    <com.larswerkman.holocolorpicker.ColorPicker
+        android:id="@+id/dialog_insert_text_colorPicker"
+        android:layout_below="@+id/dialog_insert_text_seekbar_tv_size"
+        android:layout_centerInParent="true"
+        android:layout_width="150dp"
+        android:layout_height="150dp" />
+    <TextView
+        android:id="@+id/dialog_insert_text_examples"
+        android:text="示例文字"
+        android:textSize="35sp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/dialog_insert_text_colorPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

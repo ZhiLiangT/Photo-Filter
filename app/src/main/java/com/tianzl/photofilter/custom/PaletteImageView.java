@@ -261,6 +261,13 @@ public class PaletteImageView extends SimpleDraweeView {
             canvas.drawPath(path, paint);
         }
     }
+    public void drawText(String content,int size,int color,float x,float y){
+        Paint paint=new Paint();
+        paint.setColor(color);
+        paint.setTextSize(size);
+        canvas.drawText(content,x,y,paint);
+
+    }
 
     public interface Callback {
         void onUndoRedoStatusChanged();
