@@ -401,7 +401,6 @@ public class MainActivity extends AppCompatActivity implements
         dialogFragment.setOnItemClick(new GridDialogFragment.OnItemClick() {
             @Override
             public void OnItem(FilterInfo filterInfo) {
-                BitmapUtils.destroyBitmap(mBitmap);
                 mBitmap = setBitmap();
                 if (mBitmap != null) {
                     gpuImage.setImage(mBitmap);
