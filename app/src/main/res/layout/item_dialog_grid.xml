@@ -6,7 +6,6 @@
     android:layout_height="70dp">
     <ImageView
         android:id="@+id/item_dialog_grid_iv"
-        android:src="@mipmap/placeholder"
         android:scaleType="centerCrop"
         android:padding="10dp"
         android:layout_width="match_parent"

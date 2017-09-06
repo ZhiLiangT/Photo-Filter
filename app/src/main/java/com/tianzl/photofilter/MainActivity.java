@@ -396,6 +396,7 @@ public class MainActivity extends AppCompatActivity implements
      * 打开框架滤镜Dialog
      */
     private void OpenFilterList() {
+
         GridDialogFragment dialogFragment = new GridDialogFragment();
         dialogFragment.show(getSupportFragmentManager(), "dialog_grid");
         dialogFragment.setOnItemClick(new GridDialogFragment.OnItemClick() {
@@ -408,6 +409,8 @@ public class MainActivity extends AppCompatActivity implements
                     mBitmap = gpuImage.getBitmapWithFilterApplied();
                     //显示处理后的图片
                     surfaceView.setImageBitmap(mBitmap);
+                    filterInfo.getFileter().destroy();
+                    gpuImage.deleteImage();
                     setYuan();
                 } else {
                     Toast.makeText(MainActivity.this, "尚未添加图片，请选择图片之后再进行操作", Toast.LENGTH_SHORT).show();
