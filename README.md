@@ -32,7 +32,7 @@ https://github.com/CyberAgent/android-gpuimage
 
 ## 画笔
 
-画笔模块，暂时功能有 清除轨迹，选择画笔，选择橡皮擦，选择画笔颜色和选择画笔粗细（后期 待添加撤销和反撤销）
+画笔模块，暂时功能有 清除轨迹，选择画笔，选择橡皮擦，撤销画笔轨迹和反撤销轨迹，选择画笔颜色和选择画笔粗细
 
 ![画笔模块](https://github.com/ZhiLiangT/Photo-Filter/raw/master/img/photo_filter_2.png  "首页")<br>
 
