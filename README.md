@@ -36,6 +36,13 @@ https://github.com/CyberAgent/android-gpuimage
 
 ![画笔模块](https://github.com/ZhiLiangT/Photo-Filter/raw/master/img/photo_filter_2.png  "首页")<br>
 
+## 添加文字
+
+包括文字的大小（seekbar滑动选择大小），文字的颜色（颜色选择器进行选择），动态改变文字的位置（切换模块后绘制在ImageView上），添加字体，暂时提供三种字体
+
+![画笔模块](https://github.com/ZhiLiangT/Photo-Filter/raw/master/img/photo_filter_8.png  "首页")<br>
+
+
 ## 保存
 
 点击保存弹出Dialog 选择文件夹，对当前的图片进行保存到指定文件夹的操作。
