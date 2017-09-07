@@ -11,8 +11,12 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,14 +37,19 @@ import com.tianzl.photofilter.adapter.FilterAdapter;
 import com.tianzl.photofilter.adapter.PaintSizeAdapter;
 import com.tianzl.photofilter.been.FilterBeen;
 import com.tianzl.photofilter.been.FilterInfo;
+import com.tianzl.photofilter.been.TextInfo;
+import com.tianzl.photofilter.custom.MoveTextView;
 import com.tianzl.photofilter.custom.PaletteImageView;
 import com.tianzl.photofilter.dialog.ColorPickerDialog;
 import com.tianzl.photofilter.dialog.FoldersDialogFragment;
 import com.tianzl.photofilter.dialog.GridDialogFragment;
+import com.tianzl.photofilter.dialog.InsertTextDialog;
 import com.tianzl.photofilter.utisl.BitmapUtils;
 import com.tianzl.photofilter.utisl.Constants;
 import com.tianzl.photofilter.utisl.DataUtils;
+import com.tianzl.photofilter.utisl.DisplayUtils;
 import com.tianzl.photofilter.utisl.FilterUtils;
+import com.tianzl.photofilter.utisl.ImageUtil;
 import com.tianzl.photofilter.utisl.TimeUtils;
 import com.tianzl.photofilter.utisl.UriUtils;
 import com.tianzl.photofilter.utisl.ViewUtils;
@@ -58,41 +67,47 @@ public class MainActivity extends AppCompatActivity implements
         View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
     private final String TAG = this.getClass().getSimpleName();
-    private ImageView ivSave, ivOpen;                                                //打开图库和保存图片
-    private ImageView ivHue, ivFilter, ivPaint, ivColor, ivSize;                        //功能模块按钮
+    private RelativeLayout rlRoot;
+    private MoveTextView tvInsert;                                                       //添加的文字
+    private ImageView ivSave, ivOpen;                                                    //打开图库和保存图片
+    private ImageView ivHue, ivFilter, ivPaint, ivColor, ivSize;                         //功能模块按钮
     private ImageButton ibBack, ibGo, ibPaint, ibEraser, ibPaintColor, ibPaintSize;      //画板模块按钮
-    private SeekBar seekRed, seekGreen, seekBlue;             //RGB色调进度条
-    private TextView tvHueRed, tvHueGreen, tvHueBlue;         //RGB色调百分比
-    private PaletteImageView surfaceView;                   //图片
-    private RecyclerView rvfilter;                          //自定义滤镜列表
-    private RelativeLayout rgbLayout;                       //色调布局
-    private TextView tvPrompt;                              //无图片时：背景
-    private LinearLayout llPalette;                         //画板布局
-    private RelativeLayout rlImage;                         //图片的外围布局
-    private RecyclerView rvPaintSize;                       //选择画笔Size的RV
-    private PaintSizeAdapter paintSizeAdapter;              //画笔size的适配器
-    private FilterAdapter adapter;                          //滤镜的适配器
-    private GPUImage gpuImage;                              //GPUImage框架对象
+    private SeekBar seekRed, seekGreen, seekBlue;                   //RGB色调进度条
+    private TextView tvHueRed, tvHueGreen, tvHueBlue;               //RGB色调百分比
+    private PaletteImageView surfaceView;                           //图片
+    private RecyclerView rvfilter;                                  //自定义滤镜列表
+    private RelativeLayout rgbLayout;                               //色调布局
+    private TextView tvPrompt;                                      //无图片时：背景
+    private LinearLayout llPalette;                                 //画板布局
+    private RelativeLayout rlImage;                                 //图片的外围布局
+    private RecyclerView rvPaintSize;                               //选择画笔Size的RV
+    private PaintSizeAdapter paintSizeAdapter;                      //画笔size的适配器
+    private FilterAdapter adapter;                                  //滤镜的适配器
+    private GPUImage gpuImage;                                      //GPUImage框架对象
     private Bitmap mBitmap;
-    private static final int SELECT_PHOTO = 1;                //打开图库请求码
+    private static final int SELECT_PHOTO = 1;                      //打开图库请求码
     private Canvas canvas;
     private Paint paint;
     private Bitmap copyBitmap;
     private float redValue = 1f, greenValue = 1f, blueValue = 1f;   //RGB色调初始值
-    private int newPalettePosition = 0;                       //画板模块上次点击的位置
-    private ImageButton[] ibs = new ImageButton[6];           //画板模块按钮
-    private int paintColor;                                 //画笔颜色
-    private Bitmap copy;                                    //copy的bitmap
-    private String path;                                    //图片地址
-    private int requestWidth;                               //图片宽度
-    private int requestHeight;                              //图片高度
+    private int newPalettePosition = 0;                             //画板模块上次点击的位置
+    private ImageButton[] ibs = new ImageButton[6];                 //画板模块按钮
+    private int paintColor;                                         //画笔颜色
+    private String path;                                            //图片地址
+    private int requestWidth;                                       //图片宽度
+    private int requestHeight;                                      //图片高度
+    private int rootWidth;
+    private int rootHeight;
+    private TextInfo textInfo;
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);// 固定横屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,   // 隐藏状态栏
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //初始化Fresco
         Fresco.initialize(this);
         setContentView(R.layout.activity_main);
         initView();
@@ -130,7 +145,13 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * 初始化数据
      */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void initData() {
+        rootWidth=ViewUtils.getScreen(this,ViewUtils.WINDOW_WIDTH);
+        rootHeight=ViewUtils.getScreen(this,ViewUtils.WINDOW_HEIGHT);
+        //加载背景图
+        Bitmap bp=BitmapUtils.getFileSimpleBitmap(getResources(),R.mipmap.bg1,rootWidth,rootHeight);
+        rlRoot.setBackground(new BitmapDrawable(getResources(),bp));
         surfaceView.setDrawingCacheEnabled(true);
         //将画板模块按钮添加进数组
         ibs[0] = ibBack;
@@ -155,11 +176,12 @@ public class MainActivity extends AppCompatActivity implements
         rvPaintSize.setAdapter(paintSizeAdapter);
         rvPaintSize.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
-
     /**
      * 初始化View
      */
     private void initView() {
+        tvInsert= (MoveTextView) findViewById(R.id.main_insert_text);
+        rlRoot= (RelativeLayout) findViewById(R.id.main_root);
         rvPaintSize = (RecyclerView) findViewById(R.id.main_paint_size_rv);
         tvHueRed = (TextView) findViewById(R.id.main_hue_tv_red);
         tvHueGreen = (TextView) findViewById(R.id.main_hue_tv_green);
@@ -200,8 +222,6 @@ public class MainActivity extends AppCompatActivity implements
         ibPaintSize.setOnClickListener(this);
     }
 
-
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -211,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.main_img_open:
                 //打开图库，选择一张图片，初始化滤镜为原图,清除画板轨迹，RGB色调置为1
-                initialization();
+
                 OpenImg();
                 break;
             case R.id.main_img_hue:
@@ -219,8 +239,10 @@ public class MainActivity extends AppCompatActivity implements
                 isShowModule(Constants.SHOW_HUE);
                 break;
             case R.id.main_img_filter:
+                //添加文字
+                insertText();
                 //打开框架提供的滤镜 dialog形式
-                OpenFilterList();
+                //OpenFilterList();
                 break;
             case R.id.main_img_paint:
                 //显示画板模块，默认显示画笔开启
@@ -232,8 +254,11 @@ public class MainActivity extends AppCompatActivity implements
                 isShowModule(Constants.SHOW_FILTER);
                 break;
             case R.id.main_img_reduction:
-                //初始化
-                ViewUtils.showDialgo(this, "提示", "点击确定后进行初始化，重置为原图，之前操作不保存", new ViewUtils.CallBack() {
+                //初始化为原图
+                ViewUtils.showDialgo(this,
+                        "提示",
+                        "点击确定后进行初始化，重置为原图，之前操作不保存",
+                        new ViewUtils.CallBack() {
                     @Override
                     public void onConfirm() {
                         imgInit();
@@ -245,7 +270,6 @@ public class MainActivity extends AppCompatActivity implements
                 //清空 画板轨迹
                 showPalete(0);
                 surfaceView.undo();
-                //surfaceView.clear();
                 break;
             case R.id.main_palette_go:
                 //反撤销
@@ -283,11 +307,11 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    //初始化
+    //初始化为原图
     public void imgInit() {
-        //初始化
-        if (copy != null) {
-            BitmapUtils.destroyBitmap(copy);
+        //释放bitmap
+        if (mBitmap != null) {
+            BitmapUtils.destroyBitmap(mBitmap);
         }
         surfaceView.clear();
         surfaceView.clearList();
@@ -324,11 +348,13 @@ public class MainActivity extends AppCompatActivity implements
      * 选择画板下模块，显示当前点击和隐藏上次点击按钮
      */
     public void showPalete(int position) {
+        //如果点击的是画笔粗细，显示画笔粗细的RecyclerView，否则隐藏
         if (position == 5) {
             rvPaintSize.setVisibility(View.VISIBLE);
         } else {
             rvPaintSize.setVisibility(View.INVISIBLE);
         }
+        //显示和隐藏画板下模块
         if (newPalettePosition != position) {
             ibs[newPalettePosition].setSelected(false);
             ibs[position].setSelected(true);
@@ -343,13 +369,13 @@ public class MainActivity extends AppCompatActivity implements
     public void isShowModule(int type) {
         switch (type) {
             case Constants.SHOW_HUE:
-                copy = setBitmap();
+                mBitmap = setBitmap();
                 llPalette.setVisibility(View.INVISIBLE);
                 rvfilter.setVisibility(View.INVISIBLE);
                 rgbLayout.setVisibility(View.VISIBLE);
                 break;
             case Constants.SHOW_FILTER:
-                copy= setBitmap();
+                mBitmap= setBitmap();
                 llPalette.setVisibility(View.INVISIBLE);
                 rvfilter.setVisibility(View.VISIBLE);
                 rgbLayout.setVisibility(View.INVISIBLE);
@@ -361,6 +387,7 @@ public class MainActivity extends AppCompatActivity implements
                 rgbLayout.setVisibility(View.INVISIBLE);
                 break;
         }
+        drawText();
         rvPaintSize.setVisibility(View.INVISIBLE);
     }
 
@@ -369,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     public Bitmap setBitmap() {
         Bitmap bit = surfaceView.buildBitmap();
-        BitmapUtils.destroyBitmap(copy);
+        BitmapUtils.destroyBitmap(mBitmap);
         surfaceView.clearColorFilter();
         surfaceView.setImageBitmap(bit);
         surfaceView.setSwitch(false);
@@ -378,22 +405,59 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
+     * 添加文字
+     */
+    public void insertText(){
+        tvInsert.setScreen(requestWidth,requestHeight);
+        InsertTextDialog dialog=new InsertTextDialog();
+        dialog.show(getSupportFragmentManager(),"dialog_insert_text");
+        dialog.setOnClickListener(new InsertTextDialog.OnClickListener() {
+            @Override
+            public void onClick(TextInfo text) {
+                if (mBitmap!=null){
+                    textInfo=text;
+                    tvInsert.setText( textInfo.getContent());
+                    tvInsert.setTextSize( textInfo.getTvSize());
+                    tvInsert.setTextColor(textInfo.getTvColor());
+                    if (textInfo.getFont()!=null&&!textInfo.getFont().equals("")){
+                        tvInsert.setTypeface(Typeface.createFromAsset(getAssets(),textInfo.getFont()));
+                    }
+                }
+            }
+        });
+    }
+
+    public void drawText(){
+        if (textInfo!=null){
+            float x=tvInsert.getX();
+            float y=tvInsert.getY()+tvInsert.getHeight();
+            int spSize= DisplayUtils.spTopx(this,textInfo.getTvSize());
+            surfaceView.drawText(textInfo.getContent(),spSize
+                    ,textInfo.getTvColor(),textInfo.getFont(),x,y);
+            tvInsert.setText("");
+            textInfo=null;
+        }
+    }
+
+    /**
      * 打开框架滤镜Dialog
      */
     private void OpenFilterList() {
+
         GridDialogFragment dialogFragment = new GridDialogFragment();
         dialogFragment.show(getSupportFragmentManager(), "dialog_grid");
         dialogFragment.setOnItemClick(new GridDialogFragment.OnItemClick() {
             @Override
             public void OnItem(FilterInfo filterInfo) {
-                BitmapUtils.destroyBitmap(copy);
-                copy = setBitmap();
-                if (copy != null) {
-                    gpuImage.setImage(copy);
+                mBitmap = setBitmap();
+                if (mBitmap != null) {
+                    gpuImage.setImage(mBitmap);
                     gpuImage.setFilter(filterInfo.getFileter());
-                    copy = gpuImage.getBitmapWithFilterApplied();
+                    mBitmap = gpuImage.getBitmapWithFilterApplied();
                     //显示处理后的图片
-                    surfaceView.setImageBitmap(copy);
+                    surfaceView.setImageBitmap(mBitmap);
+                    filterInfo.getFileter().destroy();
+                    gpuImage.deleteImage();
                     setYuan();
                 } else {
                     Toast.makeText(MainActivity.this, "尚未添加图片，请选择图片之后再进行操作", Toast.LENGTH_SHORT).show();
@@ -420,7 +484,6 @@ public class MainActivity extends AppCompatActivity implements
         dialogFragment.setCallBack(new FoldersDialogFragment.PathCallBack() {
             @Override
             public void callBack(String path) {
-                Toast.makeText(MainActivity.this, "保存路径" + path, Toast.LENGTH_SHORT).show();
                 if (path != null) {
                     //保存图片
                     Bitmap bitmap = surfaceView.buildBitmap();
@@ -447,24 +510,22 @@ public class MainActivity extends AppCompatActivity implements
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        initialization();
         if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
             Uri uri = data.getData();
             path= UriUtils.getRealPathFromUri(this,uri);
             requestWidth = surfaceView.getWidth();
             requestHeight = surfaceView.getHeight();
             mBitmap=getYuanBitmap(path,requestWidth,requestHeight);
-            copy = mBitmap.copy(Bitmap.Config.RGB_565, true);
             surfaceView.clearList();
             surfaceView.setVisibility(View.VISIBLE);
-            surfaceView.setImageBitmap(copy);
+            surfaceView.setImageBitmap(mBitmap);
             tvPrompt.setVisibility(View.INVISIBLE);
-            BitmapUtils.destroyBitmap(mBitmap);
         }
     }
     public Bitmap getYuanBitmap(String path,int width,int height){
@@ -474,11 +535,6 @@ public class MainActivity extends AppCompatActivity implements
     public void initialization() {
         setYuan();
         surfaceView.clear();
-        //回收bitmap
-        if (copy!=null){
-            Log.e(TAG,"回收 copy bitmap");
-            BitmapUtils.destroyBitmap(copy);
-        }
         if (copyBitmap!=null){
             Log.e(TAG,"回收 copyBitmap bitmap");
             BitmapUtils.destroyBitmap(copyBitmap);
@@ -487,7 +543,6 @@ public class MainActivity extends AppCompatActivity implements
             Log.e(TAG,"回收 mBitmap bitmap");
             BitmapUtils.destroyBitmap(mBitmap);
         }
-
         surfaceView.setSize(5);
         surfaceView.setMode(PaletteImageView.Mode.DRAW);
         surfaceView.setColor(Color.BLACK);
@@ -537,13 +592,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void initBitmap() {
-        if (copy == null) {
+        if (mBitmap == null) {
             return;
         }
         //先加载出一张原图(baseBitmap)，然后复制出来新的图片(copyBitmap)来，因为andorid不允许对原图进行修改.
         //baseBitmap= BitmapFactory.decodeResource(getResources(), R.drawable.link);
         //既然是复制一张与原图一模一样的图片那么这张复制图片的画纸的宽度和高度以及分辨率都要与原图一样,copyBitmap就为一张与原图相同尺寸分辨率的空白画纸
-        copyBitmap = Bitmap.createBitmap(copy.getWidth(), copy.getHeight(), copy.getConfig());
+        copyBitmap = Bitmap.createBitmap(mBitmap.getWidth(), mBitmap.getHeight(), mBitmap.getConfig());
         canvas = new Canvas(copyBitmap);//将画纸固定在画布上
         paint = new Paint();//实例画笔对象
         float[] colorArray = new float[]{
@@ -555,7 +610,7 @@ public class MainActivity extends AppCompatActivity implements
         ColorMatrix colorMatrix = new ColorMatrix(colorArray);//将保存的颜色矩阵的数组作为参数传入
         ColorMatrixColorFilter colorFilter = new ColorMatrixColorFilter(colorMatrix);//再把该colorMatrix作为参数传入来实例化ColorMatrixColorFilter
         paint.setColorFilter(colorFilter);//并把该过滤器设置给画笔
-        canvas.drawBitmap(copy, new Matrix(), paint);//传如baseBitmap表示按照原图样式开始绘制，将得到是复制后的图片
+        canvas.drawBitmap(mBitmap, new Matrix(), paint);//传如baseBitmap表示按照原图样式开始绘制，将得到是复制后的图片
         surfaceView.setImageBitmap(copyBitmap);
     }
 }

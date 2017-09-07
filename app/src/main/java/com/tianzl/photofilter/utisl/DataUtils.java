@@ -72,13 +72,13 @@ public class DataUtils {
             "交叉阴影","鱼眼","水晶球","倒立","噪点","CGA色彩","浮雕","点染","高斯模糊",
             "盒状模糊","双边模糊","色阶","反色","曝光"
     };
-    //框架滤镜对象的背景图
-    private static  int[] resource=new int[]{
-            R.mipmap.a1,R.mipmap.a2,R.mipmap.a3,R.mipmap.a4,R.mipmap.a5,R.mipmap.a6,R.mipmap.a7,
-            R.mipmap.a8,R.mipmap.a9,R.mipmap.a10,R.mipmap.a11,R.mipmap.a12,R.mipmap.a13,R.mipmap.a14,
-            R.mipmap.a15,R.mipmap.a16,R.mipmap.a17,R.mipmap.a1,R.mipmap.a2,R.mipmap.a3,R.mipmap.a4,
-            R.mipmap.a5,R.mipmap.a6
-    };
+//    //框架滤镜对象的背景图
+//    private static  int[] resource=new int[]{
+//            R.mipmap.a1,R.mipmap.a2,R.mipmap.a3,R.mipmap.a4,R.mipmap.a5,R.mipmap.a6,R.mipmap.a7,
+//            R.mipmap.a8,R.mipmap.a9,R.mipmap.a10,R.mipmap.a11,R.mipmap.a12,R.mipmap.a13,R.mipmap.a14,
+//            R.mipmap.a15,R.mipmap.a16,R.mipmap.a17,R.mipmap.a1,R.mipmap.a2,R.mipmap.a3,R.mipmap.a4,
+//            R.mipmap.a5,R.mipmap.a6
+//    };
     //画笔大小的数组
     public static final int [] paintsize={
             5,10,15,20,25,30,35,40,45,50
@@ -90,7 +90,7 @@ public class DataUtils {
             FilterInfo filterInfo=new FilterInfo();
             filterInfo.setTitle(strTitle[i]);
             filterInfo.setFileter(filters[i]);
-            filterInfo.setResource(resource[i]);
+            //filterInfo.setResource(resource[i]);
             data.add(filterInfo);
         }
         return data;

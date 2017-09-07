@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Typeface;
 import android.graphics.Xfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 
 public class PaletteImageView extends SimpleDraweeView {
-
+    private Context context;
     private float mLastX;
     private float mLastY;
     private Paint paint;
@@ -55,7 +56,7 @@ public class PaletteImageView extends SimpleDraweeView {
 
     public PaletteImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public PaletteImageView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -65,7 +66,8 @@ public class PaletteImageView extends SimpleDraweeView {
     /**
      * 初始化
      */
-    private void init() {
+    private void init(Context context) {
+        this.context=context;
         //初始化画笔
         paint=new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
         paint.setStyle(Paint.Style.STROKE);
@@ -260,6 +262,14 @@ public class PaletteImageView extends SimpleDraweeView {
         void draw(Canvas canvas) {
             canvas.drawPath(path, paint);
         }
+    }
+    public void drawText(String content,int size,int color,String font,float x,float y){
+        Paint paint=new Paint();
+        paint.setColor(color);
+        paint.setTextSize(size);
+        paint.setTypeface(Typeface.createFromAsset(context.getAssets(),font));
+        canvas.drawText(content,x,y,paint);
+
     }
 
     public interface Callback {

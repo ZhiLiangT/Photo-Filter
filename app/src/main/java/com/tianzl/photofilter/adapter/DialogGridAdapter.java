@@ -37,10 +37,10 @@ public class DialogGridAdapter extends RecyclerView.Adapter<DialogGridAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.tvTitle.setText(mData.get(position).getTitle());
-        int resource=mData.get(position).getResource();
-        if (resource!=0){
-            holder.ivIcon.setImageResource(resource);
-        }
+//        int resource=mData.get(position).getResource();
+//        if (resource!=0){
+//            holder.ivIcon.setImageResource(resource);
+//        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -36,4 +36,6 @@ public class DisplayUtils {
         float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue*scaledDensity+0.5f);
     }
+
+
 }

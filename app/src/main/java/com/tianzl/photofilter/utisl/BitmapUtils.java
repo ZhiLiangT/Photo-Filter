@@ -160,6 +160,7 @@ public class BitmapUtils {
         if (bitmap != null) {
             Bitmap b = bitmap;
             if (b != null && !b.isRecycled()) {
+                Log.d("BitmapUtils","可以释放bitmap");
                 b.recycle();
             }
             bitmap = null;
@@ -189,6 +190,7 @@ public class BitmapUtils {
         BitmapFactory.decodeFile(file_path,options);
         //inSampleSize:表示对图像像素的缩放比例，假设为2，表示decode还有的图像的像素为原图像的1/2
         options.inSampleSize=getFileSimpleSize(width,height,options);
+        options.inPreferredConfig= Bitmap.Config.RGB_565;
         //在设置options的inSampleSize后我们将inJustDecodeBounds设置为false，再次调用就可生成bitmap了
         options.inJustDecodeBounds=false;
         return BitmapFactory.decodeFile(file_path,options);
@@ -199,6 +201,7 @@ public class BitmapUtils {
         BitmapFactory.decodeResource(resources,redId);
         options.inSampleSize=getFileSimpleSize(width,height,options);
         options.inJustDecodeBounds=false;
+        options.inPreferredConfig= Bitmap.Config.RGB_565;
         return BitmapFactory.decodeResource(resources,redId,options);
     }
 
@@ -236,5 +239,24 @@ public class BitmapUtils {
         outStream.close();
         inStream.close();
         return outStream.toByteArray();
+    }
+
+    public static byte[] getBytes(Bitmap bitmap){
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+
+        return baos.toByteArray();
+
+    }
+    public static Bitmap Bytes2Bimap(byte[] b) {
+
+        if (b.length != 0) {
+            return BitmapFactory.decodeByteArray(b, 0, b.length);
+        } else {
+            return null;
+        }
+
     }
 }
