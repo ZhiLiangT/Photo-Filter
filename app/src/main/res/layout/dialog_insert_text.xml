@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
     <include
         android:id="@+id/dialog_insert_text_title"
         android:layout_height="40dp"
@@ -54,17 +54,60 @@
         android:layout_height="30dp" />
     <com.larswerkman.holocolorpicker.ColorPicker
         android:id="@+id/dialog_insert_text_colorPicker"
+        android:layout_marginLeft="70dp"
         android:layout_below="@+id/dialog_insert_text_seekbar_tv_size"
-        android:layout_centerInParent="true"
         android:layout_width="150dp"
         android:layout_height="150dp" />
+    <LinearLayout
+        android:layout_below="@+id/dialog_insert_text_title"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/dialog_insert_text_seekbar_tv_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/dialog_insert_text_fonttv"
+            android:text="选择字体"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/dialog_insert_text_font_one"
+            android:text="hello!你好#_#"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp" />
+        <TextView
+            android:id="@+id/dialog_insert_text_font_two"
+            android:text="hello!你好#_#"
+            android:layout_marginTop="5dp"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp" />
+        <TextView
+            android:id="@+id/dialog_insert_text_font_three"
+            android:text="hello!你好#_#"
+            android:layout_marginTop="5dp"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
     <TextView
         android:id="@+id/dialog_insert_text_examples"
         android:text="示例文字"
         android:textSize="35sp"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/dialog_insert_text_colorPicker"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="80dp" />
 
 </RelativeLayout>

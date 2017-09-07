@@ -8,6 +8,7 @@ public class TextInfo {
     private String content;
     private int tvSize;
     private int tvColor;
+    private String font;
 
     public TextInfo() {
     }
@@ -18,7 +19,20 @@ public class TextInfo {
         this.tvColor = tvColor;
     }
 
+    public TextInfo(String content, int tvSize, int tvColor, String font) {
+        this.content = content;
+        this.tvSize = tvSize;
+        this.tvColor = tvColor;
+        this.font = font;
+    }
 
+    public String getFont() {
+        return font;
+    }
+
+    public void setFont(String font) {
+        this.font = font;
+    }
 
     public String getContent() {
         return content;

@@ -1,6 +1,7 @@
 package com.tianzl.photofilter.dialog;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -18,13 +19,14 @@ import android.widget.TextView;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.tianzl.photofilter.R;
 import com.tianzl.photofilter.been.TextInfo;
+import com.tianzl.photofilter.utisl.Constants;
 
 
 /**
  * Created by tianzl on 2017/9/6.
  */
 
-public class InsertTextDialog extends DialogFragment {
+public class InsertTextDialog extends DialogFragment implements View.OnClickListener{
     private SeekBar seekBar;
     private EditText etContent;
     private TextView tvExamples;
@@ -32,6 +34,10 @@ public class InsertTextDialog extends DialogFragment {
     private TextView tvTextSize;
     private ImageButton ibBack;
     private ImageButton ibConfirm;
+    private TextView tvFont;
+    private TextView tvFontOne;
+    private TextView tvFontTwo;
+    private TextView tvFontThree;
     private int textSize;
     private int textColor;
     private String textContent;
@@ -55,6 +61,10 @@ public class InsertTextDialog extends DialogFragment {
         textSize=50/4+TEXT_MIN_SIZE;
         tvExamples.setTextSize(textSize);
         textColor= Color.BLACK;
+        //设置字体
+        tvFontOne.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.FONT_ONE));
+        tvFontTwo.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.FONT_TWO));
+        tvFontThree.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.FONT_THREE));
     }
     private void initEvent() {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -115,6 +125,32 @@ public class InsertTextDialog extends DialogFragment {
             }
         });
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.dialog_insert_text_font_one:
+                tvExamples.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),
+                        Constants.FONT_ONE));
+                textInfo.setFont(Constants.FONT_ONE);
+                break;
+            case R.id.dialog_insert_text_font_two:
+                tvExamples.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),
+                        Constants.FONT_TWO));
+                textInfo.setFont(Constants.FONT_TWO);
+                break;
+            case R.id.dialog_insert_text_font_three:
+                tvExamples.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),
+                        Constants.FONT_THREE));
+                textInfo.setFont(Constants.FONT_THREE);
+                break;
+            case R.id.dialog_insert_text_fonttv:
+                tvExamples.setTypeface(Typeface.DEFAULT);
+                textInfo.setFont("");
+                break;
+        }
+    }
+
     public interface OnClickListener{
         void onClick(TextInfo textInfo);
     }
@@ -124,6 +160,14 @@ public class InsertTextDialog extends DialogFragment {
     }
 
     private void initView(View view) {
+        tvFont=view.findViewById(R.id.dialog_insert_text_fonttv);
+        tvFont.setOnClickListener(this);
+        tvFontOne=view.findViewById(R.id.dialog_insert_text_font_one);
+        tvFontOne.setOnClickListener(this);
+        tvFontTwo=view.findViewById(R.id.dialog_insert_text_font_two);
+        tvFontTwo.setOnClickListener(this);
+        tvFontThree=view.findViewById(R.id.dialog_insert_text_font_three);
+        tvFontThree.setOnClickListener(this);
         ibBack=view.findViewById(R.id.bar_title_left);
         ibConfirm=view.findViewById(R.id.bar_title_right);
         seekBar=view.findViewById(R.id.dialog_insert_text_seekbar_tvsize);

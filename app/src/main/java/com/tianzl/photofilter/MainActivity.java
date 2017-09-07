@@ -11,6 +11,7 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -230,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.main_img_open:
                 //打开图库，选择一张图片，初始化滤镜为原图,清除画板轨迹，RGB色调置为1
-                initialization();
+
                 OpenImg();
                 break;
             case R.id.main_img_hue:
@@ -418,17 +419,21 @@ public class MainActivity extends AppCompatActivity implements
                     tvInsert.setText( textInfo.getContent());
                     tvInsert.setTextSize( textInfo.getTvSize());
                     tvInsert.setTextColor(textInfo.getTvColor());
+                    if (textInfo.getFont()!=null&&!textInfo.getFont().equals("")){
+                        tvInsert.setTypeface(Typeface.createFromAsset(getAssets(),textInfo.getFont()));
+                    }
                 }
             }
         });
     }
+
     public void drawText(){
         if (textInfo!=null){
             float x=tvInsert.getX();
             float y=tvInsert.getY()+tvInsert.getHeight();
             int spSize= DisplayUtils.spTopx(this,textInfo.getTvSize());
             surfaceView.drawText(textInfo.getContent(),spSize
-                    ,textInfo.getTvColor(),x,y);
+                    ,textInfo.getTvColor(),textInfo.getFont(),x,y);
             tvInsert.setText("");
             textInfo=null;
         }
@@ -510,6 +515,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        initialization();
         if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
             Uri uri = data.getData();
             path= UriUtils.getRealPathFromUri(this,uri);
