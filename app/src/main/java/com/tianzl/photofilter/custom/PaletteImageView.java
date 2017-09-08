@@ -13,7 +13,6 @@ import android.graphics.Xfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
  * Created by tianzl on 2017/8/31.
  */
 
-public class PaletteImageView extends SimpleDraweeView {
+public class PaletteImageView extends android.support.v7.widget.AppCompatImageView {
     private Context context;
     private float mLastX;
     private float mLastY;
@@ -267,9 +266,10 @@ public class PaletteImageView extends SimpleDraweeView {
         Paint paint=new Paint();
         paint.setColor(color);
         paint.setTextSize(size);
-        paint.setTypeface(Typeface.createFromAsset(context.getAssets(),font));
+        if (font!=null&&!font.equals("")){
+            paint.setTypeface(Typeface.createFromAsset(context.getAssets(),font));
+        }
         canvas.drawText(content,x,y,paint);
-
     }
 
     public interface Callback {

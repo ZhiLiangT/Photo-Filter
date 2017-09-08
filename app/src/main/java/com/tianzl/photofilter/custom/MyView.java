@@ -31,7 +31,7 @@ public class MyView extends View {
         mScreenWidth = dm.widthPixels;
         mScreenHeight = dm.heightPixels;
 
-        Bitmap bmp = ((BitmapDrawable)getResources().getDrawable(R.drawable.link)).getBitmap();
+        Bitmap bmp = ((BitmapDrawable)getResources().getDrawable(R.mipmap.ic_launcher)).getBitmap();
         mBitmap = Bitmap.createScaledBitmap(bmp, mScreenWidth, mScreenHeight, true);
     }
 

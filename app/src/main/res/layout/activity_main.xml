@@ -67,7 +67,6 @@
         <com.tianzl.photofilter.custom.MoveTextView
             android:id="@+id/main_insert_text"
             android:includeFontPadding="false"
-
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

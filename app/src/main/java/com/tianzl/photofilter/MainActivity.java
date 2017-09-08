@@ -4,12 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Matrix;
+
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -32,7 +29,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.tianzl.photofilter.adapter.FilterAdapter;
 import com.tianzl.photofilter.adapter.PaintSizeAdapter;
 import com.tianzl.photofilter.been.FilterBeen;
@@ -49,17 +45,14 @@ import com.tianzl.photofilter.utisl.Constants;
 import com.tianzl.photofilter.utisl.DataUtils;
 import com.tianzl.photofilter.utisl.DisplayUtils;
 import com.tianzl.photofilter.utisl.FilterUtils;
-import com.tianzl.photofilter.utisl.ImageUtil;
+
 import com.tianzl.photofilter.utisl.TimeUtils;
 import com.tianzl.photofilter.utisl.UriUtils;
 import com.tianzl.photofilter.utisl.ViewUtils;
 
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-
 import jp.co.cyberagent.android.gpuimage.GPUImage;
 
 
@@ -107,8 +100,6 @@ public class MainActivity extends AppCompatActivity implements
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);// 固定横屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,   // 隐藏状态栏
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //初始化Fresco
-        Fresco.initialize(this);
         setContentView(R.layout.activity_main);
         initView();
         initData();
@@ -313,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements
         if (mBitmap != null) {
             BitmapUtils.destroyBitmap(mBitmap);
         }
+        cleanText();
         surfaceView.clear();
         surfaceView.clearList();
         setYuan();
@@ -387,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements
                 rgbLayout.setVisibility(View.INVISIBLE);
                 break;
         }
-        drawText();
+        //drawText();
         rvPaintSize.setVisibility(View.INVISIBLE);
     }
 
@@ -426,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
     }
-
+    //绘制文字到ImgeView上
     public void drawText(){
         if (textInfo!=null){
             float x=tvInsert.getX();
@@ -437,6 +429,11 @@ public class MainActivity extends AppCompatActivity implements
             tvInsert.setText("");
             textInfo=null;
         }
+    }
+    public void cleanText(){
+        tvInsert.setTextColor(Color.BLACK);
+        tvInsert.setTypeface(Typeface.DEFAULT);
+        tvInsert.setText("");
     }
 
     /**
@@ -486,6 +483,7 @@ public class MainActivity extends AppCompatActivity implements
             public void callBack(String path) {
                 if (path != null) {
                     //保存图片
+                    drawText();
                     Bitmap bitmap = surfaceView.buildBitmap();
                     saveBitmap(bitmap, path);
                     Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
@@ -533,6 +531,7 @@ public class MainActivity extends AppCompatActivity implements
     }
     //初始化
     public void initialization() {
+        cleanText();
         setYuan();
         surfaceView.clear();
         if (copyBitmap!=null){
@@ -580,7 +579,8 @@ public class MainActivity extends AppCompatActivity implements
                 tvHueBlue.setText(num + "%");
                 break;
         }
-        initBitmap();
+        //initBitmap();
+        surfaceView.setImageBitmap(BitmapUtils.initBitmap(mBitmap,redValue,greenValue,blueValue));
     }
 
     @Override
@@ -591,26 +591,4 @@ public class MainActivity extends AppCompatActivity implements
     public void onStopTrackingTouch(SeekBar seekBar) {
     }
 
-    private void initBitmap() {
-        if (mBitmap == null) {
-            return;
-        }
-        //先加载出一张原图(baseBitmap)，然后复制出来新的图片(copyBitmap)来，因为andorid不允许对原图进行修改.
-        //baseBitmap= BitmapFactory.decodeResource(getResources(), R.drawable.link);
-        //既然是复制一张与原图一模一样的图片那么这张复制图片的画纸的宽度和高度以及分辨率都要与原图一样,copyBitmap就为一张与原图相同尺寸分辨率的空白画纸
-        copyBitmap = Bitmap.createBitmap(mBitmap.getWidth(), mBitmap.getHeight(), mBitmap.getConfig());
-        canvas = new Canvas(copyBitmap);//将画纸固定在画布上
-        paint = new Paint();//实例画笔对象
-        float[] colorArray = new float[]{
-                redValue, 0, 0, 0, 0,
-                0, greenValue, 0, 0, 0,
-                0, 0, blueValue, 0, 0,
-                0, 0, 0, 1, 0
-        };
-        ColorMatrix colorMatrix = new ColorMatrix(colorArray);//将保存的颜色矩阵的数组作为参数传入
-        ColorMatrixColorFilter colorFilter = new ColorMatrixColorFilter(colorMatrix);//再把该colorMatrix作为参数传入来实例化ColorMatrixColorFilter
-        paint.setColorFilter(colorFilter);//并把该过滤器设置给画笔
-        canvas.drawBitmap(mBitmap, new Matrix(), paint);//传如baseBitmap表示按照原图样式开始绘制，将得到是复制后的图片
-        surfaceView.setImageBitmap(copyBitmap);
-    }
 }

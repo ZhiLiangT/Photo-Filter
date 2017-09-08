@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
@@ -258,5 +260,51 @@ public class BitmapUtils {
             return null;
         }
 
+    }
+    public static Bitmap initBitmap(Bitmap bitmap,float redValue,float greenValue,float blueValue) {
+        Bitmap copyBitmap;
+        if (bitmap == null) {
+            return null;
+        }
+        copyBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+        Canvas canvas = new Canvas(copyBitmap);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        float[] colorArray = new float[]{
+                redValue, 0, 0, 0, 0,
+                0, greenValue, 0, 0, 0,
+                0, 0, blueValue, 0, 0,
+                0, 0, 0, 1, 0
+        };
+        ColorMatrix colorMatrix = new ColorMatrix(colorArray);//将保存的颜色矩阵的数组作为参数传入
+        ColorMatrixColorFilter colorFilter = new ColorMatrixColorFilter(colorMatrix);//再把该colorMatrix作为参数传入来实例化ColorMatrixColorFilter
+        paint.setColorFilter(colorFilter);//并把该过滤器设置给画笔
+        canvas.drawBitmap(bitmap, new Matrix(), paint);//传如baseBitmap表示按照原图样式开始绘制，将得到是复制后的图片
+        return copyBitmap;
+    }
+    /**
+     *
+     * @param bm 图像 （不可修改）
+     * @param saturation 饱和度
+     * @param lum 亮度
+     * @return
+     */
+    public static Bitmap handleImageEffect(Bitmap bm,  float saturation, float lum) {
+
+        Bitmap bmp = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmp);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        ColorMatrix saturationMatrix = new ColorMatrix();
+        saturationMatrix.setSaturation(saturation);
+        ColorMatrix lumMatrix = new ColorMatrix();
+        lumMatrix.setScale(lum, lum, lum, 1);
+        //融合
+        ColorMatrix imageMatrix = new ColorMatrix();
+        imageMatrix.postConcat(saturationMatrix);
+        imageMatrix.postConcat(lumMatrix);
+
+        paint.setColorFilter(new ColorMatrixColorFilter(imageMatrix));
+        canvas.drawBitmap(bm, 0, 0, paint);
+
+        return bmp;
     }
 }
