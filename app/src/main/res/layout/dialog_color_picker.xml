@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:layout_width="match_parent"
+    android:layout_width="200dp"
     android:layout_height="wrap_content">
     <include
         android:id="@+id/dialog_color_picker_title"
@@ -16,8 +16,8 @@
         android:id="@+id/dialog_color_picker_colorPicker"
         android:layout_below="@+id/dialog_color_picker_title"
         android:layout_centerInParent="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="150dp"
+        android:layout_height="150dp" />
     <TextView
         android:id="@+id/dialog_color_picker_tv_sv"
         android:text="@string/color_depth"
@@ -48,7 +48,7 @@
     <TextView
         android:id="@+id/dialog_color_picker_examples"
         android:text="@string/examples_text"
-        android:textSize="40dp"
+        android:textSize="20sp"
         android:layout_marginTop="5dp"
         android:layout_below="@+id/dialog_color_picker_opacity"
         android:layout_centerHorizontal="true"

@@ -1,39 +1,51 @@
-已完成功能及优化部分：
+已完成功能：
 
 1.调色板功能：调整RGB色调，进度条形式选择
 
-2.滤镜：添加GPUImage框架滤镜23种，Dialog形式选择
+2.滤镜：添加GPUImage框架滤镜23种，Dialog形式选择  ---参考相关资料<4、23>
 
 3.滤镜：自定义滤镜，提供24中滤镜矩阵，以RecyclerView列表形式选择
 
 4.选择图片：打开图库选择图片，同时copy一份格式为RGB_565的原图
 
-5.画板：添加画笔，根据滑动轨迹进行绘制
+5.画板：添加画笔，根据滑动轨迹进行绘制 ---参考相关资料<6>
 
-6.画板：画笔颜色，采用颜色选择器ColorPicker进行颜色选择，Dialog形式选择
+6.画板：画笔颜色，采用颜色选择器ColorPicker进行颜色选择，Dialog形式选择 ---参考相关资料<9>
 
 7.画板：画笔粗细，提供10粗细种标准，由左到右按从小到大方式排列，RecyclerView列表形式选择
 
-8.画板：撤销与反撤销，在滑动过程中，抬起手指时，记录当前轨迹的Paint和Path进行保存，点击撤销与反撤销进行界面重绘
+8.画板：撤销与反撤销，在滑动过程中，抬起手指时，记录该段轨迹的Paint和Path进行保存，点击撤销与反撤销进行界面重绘
 
 9.画板：橡皮擦功能，选择橡皮擦时，禁用颜色选择按钮，只可选择粗细，橡皮擦颜色固定为白色
 
-10.一键还原：在获取本地图片的时候，保存原图，一切操作在copy的Bitmap上进行，点击后，清空画板轨迹的集合，为ImageView重新赋值原图
+10.一键还原：在获取本地图片的时候，保存原图的地址，点击后，释放当前的Bitmap，清空画板轨迹的集合，为ImageView重新赋值原图
 
 11.选择文件夹：创建线程池，不断去获取点击文件夹的子文件夹列表，以列表形式显示，首行为返回上一级，Dialog形式选择
 
 12.保存图片：根据选择的文件夹和当前控件的Bitmap，进行保存，图片格式为JPEG
 
+13.添加文字：包括文字的大小（seekbar滑动选择大小），文字的颜色（颜色选择器进行选择），动态改变文字的位置（切换模块后绘制在ImageView上）
+
+14.添加字体：暂时提供三种字体
+
 -----------------------------------------------------------------------------------
 优化记录：
 
-1.优化：使用fresco作为图片加载框架 ImageView替换为SimpleDraweeView，良好的缓存机制
+1.优化图片加载：加载图像时参照控件的宽高像素来获取合适大小的bitmap（如图像的分辨率为4032X3024,而屏幕的分辨率为1920X1080，
 
-2.加载图像时参照控件的宽高像素来获取合适大小的bitmap（如图像的分辨率为4032X3024,而屏幕的分辨率为1920X1080，
+如果不对图像进行处理就直接显示在屏幕上，就会浪费掉非常多的内存（如果内存不够使用就直接OOM了），而且并没有达到很好的显示效果）
 
-如果不对图像进行处理就直接显示在屏幕上，就会浪费掉非常多的内存（如果内存不够使用就直接oom了），而且并没有达到很好的显示效果）
+效果：降低了一半以上的内存（视情况而定，图片像素与屏幕像素的比值越大效果越明显）---参考相关资料<19>
 
-效果：降低了一半以上的内存（视情况而定，图片像素与屏幕像素的比值越大效果越明显）
+选择图库图片（已优化）滤镜列表图片（已优化）
+
+2.删除copy的bitmap，减少内存占用
+
+3.优化APK大小（删除无用工具类，代码封装，减少高清背景图，优化布局结构）当前apk 1.8MB
+
+4.屏幕适配
+
+5.优化内存（）
 
 -----------------------------------------------------------------------------------
 
@@ -43,7 +55,7 @@
 
 思路：保存每一步操作后的图片到本地的临时文件夹中，固定保存图片数量为10，进行撤销时，选择保存的图片进行加载
 
-疑问：图片美化操作一般步骤较多（通常至少几十次左右），频繁的保存、获取和释放较为占用内存
+疑问：图片美化操作一般步骤较多，调色调换滤镜等（通常都会在十次以上），频繁的保存、获取和释放较为占用内存
 
 -----------------------------------------------------------------------------------
 
@@ -59,69 +71,94 @@
 
 推荐颜色：推荐常用的几种颜色5—10中左右，直接点击即可使用
 
+添加文字，文字颜色，文字样式，文字大小，文字方向等。（已添加）
+
 -----------------------------------------------------------------------------------
 
 待优化：
 
 占用内存过高
 
-图片压缩：加载高清大图，按照一定的比例进行压缩处理，避免占用过高的内存
+图片压缩：加载高清大图，按照一定的比例进行压缩处理，避免占用过高的内存（已处理80%）
+
+背景图优化：取消背景图之后内存减少了6M，但是不加背景图整体不美观（已优化）
 
 -----------------------------------------------------------------------------------
 
 相关资料：
 
-//史上最全的Android 图片滤镜 colorMatrix自定义任意图片滤镜
+1.//史上最全的Android 图片滤镜 colorMatrix自定义任意图片滤镜
 http://blog.csdn.net/qiushi_1990/article/details/50680297
 
-//Paint之ColorMatrix与滤镜效果
+2.//Paint之ColorMatrix与滤镜效果
 http://www.2cto.com/kf/201604/501081.html
 
-//图片色调饱和度、色相、亮度处理
+3.//图片色调饱和度、色相、亮度处理
 http://blog.csdn.net/luohai859/article/details/25388441 
 
-//android-gpuimage  github地址
+4.//android-gpuimage  github地址
 https://github.com/CyberAgent/android-gpuimage
 
-//图片美化  人脸美颜
+5.//图片美化  人脸美颜
 https://github.com/YuAo/YUCIHighPassSkinSmoothing
 
-//android实现简单的画画板
+6.//android实现简单的画画板
 http://www.2cto.com/kf/201401/273814.html
 
-//Matrix(三) 神奇的ColorMatrix(图片的颜色与色相修改)
+7.//Matrix(三) 神奇的ColorMatrix(图片的颜色与色相修改)
 http://www.jianshu.com/p/ebda27f061e3
 
-//Android图像处理（一）色调、饱和度、亮度
+8.//Android图像处理（一）色调、饱和度、亮度
 http://blog.csdn.net/duanliuchang/article/details/51548743
 
-//颜色选择器：
+9.//颜色选择器：
 https://github.com/LarsWerkman/HoloColorPicker
 
-Android图像处理整理
+10.Android图像处理整理
 http://blog.csdn.net/luzhenyuxfcy/article/details/49427781
 
-[Android] 图像各种处理系列文章合集
+11.[Android] 图像各种处理系列文章合集
 http://blog.csdn.net/eastmount/article/details/40689397
 
-Android加载大图——BitmapRegionDecoder
+12.Android加载大图——BitmapRegionDecoder
 http://www.jianshu.com/p/b0e2be9e0f8c
 
-Android 高清加载巨图方案 拒绝压缩图片
+13.Android 高清加载巨图方案 拒绝压缩图片
 http://blog.csdn.net/lmj623565791/article/details/49300989/
 
-Matrix的介绍
+14.Matrix的介绍
 http://www.cnblogs.com/qiengo/archive/2012/06/30/2570874.html
 
-Android Matrix详解
+15.Android Matrix详解
 http://blog.csdn.net/flash129/article/details/8234599
 
-浅谈android中图片处理之色彩特效处理ColorMatrix(三)
+16.浅谈android中图片处理之色彩特效处理ColorMatrix(三)
 http://blog.csdn.net/u013064109/article/details/51416389
 
-Android：一个可以随意涂鸦的画板应用
+17.Android：一个可以随意涂鸦的画板应用
 http://blog.csdn.net/vivien2004/article/details/50220457
 
-Android 图片压缩之多种压缩方式结合使用
+18.Android 图片压缩之多种压缩方式结合使用
 http://www.jianshu.com/p/e9e1db845c21
+
+19.Android 多种方式正确的加载图像，有效避免oom
+http://www.cnblogs.com/android-blogs/p/5586480.html
+
+20.Android中高效的显示图片 - 加载大图
+http://www.jianshu.com/p/590f61222637
+
+21.GDI+ ColorMatrix的完全揭秘
+http://blog.csdn.net/maozefa/article/details/2896752
+
+22.Android手动回收bitmap,引发Canvas: trying to use a recycled bitmap处理
+http://blog.csdn.net/primer_programer/article/details/26697037
+
+23.Android图像滤镜框架GPUImage从配置到应用
+http://blog.csdn.net/it_zjyang/article/details/52268918
+
+24.滤镜 框架 CameraFilter
+https://github.com/nekocode/CameraFilter
+
+25.OpenGL ES之GLSurfaceView学习一：介绍
+http://blog.csdn.net/chenjie19891104/article/details/6311209
 

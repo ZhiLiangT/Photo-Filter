@@ -140,6 +140,14 @@ public class PaletteImageView extends android.support.v7.widget.AppCompatImageVi
             invalidate();
         }
     }
+    public void clearPath(){
+        if (mDrawingList!=null&&mDrawingList.size()!=0){
+            mDrawingList.clear();
+        }
+       if (mRemovedList!=null&&mRemovedList.size()!=0){
+           mRemovedList.clear();
+       }
+    }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         //画笔开关

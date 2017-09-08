@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements
         initView();
         initData();
         initEvent();
+
     }
 
     /**
@@ -222,7 +223,6 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.main_img_open:
                 //打开图库，选择一张图片，初始化滤镜为原图,清除画板轨迹，RGB色调置为1
-
                 OpenImg();
                 break;
             case R.id.main_img_hue:
@@ -393,6 +393,7 @@ public class MainActivity extends AppCompatActivity implements
         surfaceView.setImageBitmap(bit);
         surfaceView.setSwitch(false);
         surfaceView.clear();
+        surfaceView.clearPath();
         return bit;
     }
 
