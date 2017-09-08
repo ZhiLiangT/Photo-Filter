@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="400dp">
+    android:layout_height="360dp">
     <include
         android:id="@+id/dialog_folder_title"
-        layout="@layout/title_bar"/>
+        layout="@layout/title_bar"
+         />
     <TextView
         android:id="@+id/dialog_folder_tv"
         android:text="当前路径:"
@@ -29,7 +30,7 @@
         android:paddingRight="10dp"
         android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="270dp"/>
     <LinearLayout
         android:id="@+id/loading_view"
         android:layout_width="match_parent"

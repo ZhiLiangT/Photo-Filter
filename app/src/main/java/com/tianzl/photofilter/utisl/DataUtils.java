@@ -1,6 +1,5 @@
 package com.tianzl.photofilter.utisl;
 
-import com.tianzl.photofilter.R;
 import com.tianzl.photofilter.been.FilterBeen;
 import com.tianzl.photofilter.been.FilterInfo;
 

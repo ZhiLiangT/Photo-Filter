@@ -62,9 +62,12 @@ public class InsertTextDialog extends DialogFragment implements View.OnClickList
         tvExamples.setTextSize(textSize);
         textColor= Color.BLACK;
         //设置字体
-        tvFontOne.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.FONT_ONE));
-        tvFontTwo.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.FONT_TWO));
-        tvFontThree.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.FONT_THREE));
+        tvFontOne.setText("字体1");
+        tvFontTwo.setText("字体2");
+        tvFontThree.setText("字体3");
+//        tvFontOne.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.FONT_ONE));
+//        tvFontTwo.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.FONT_TWO));
+//        tvFontThree.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.FONT_FOUR));
     }
     private void initEvent() {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -141,8 +144,8 @@ public class InsertTextDialog extends DialogFragment implements View.OnClickList
                 break;
             case R.id.dialog_insert_text_font_three:
                 tvExamples.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),
-                        Constants.FONT_THREE));
-                textInfo.setFont(Constants.FONT_THREE);
+                        Constants.FONT_FOUR));
+                textInfo.setFont(Constants.FONT_FOUR);
                 break;
             case R.id.dialog_insert_text_fonttv:
                 tvExamples.setTypeface(Typeface.DEFAULT);
