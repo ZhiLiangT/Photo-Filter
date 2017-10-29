@@ -237,4 +237,16 @@
             style="@style/horizontal_mean" />
         <View style="@style/vertical_divider_e3"/>
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_ll_Frame"
+        android:layout_toRightOf="@+id/main_ll"
+        android:background="@drawable/border_white"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="50dp"/>
+
 </RelativeLayout>

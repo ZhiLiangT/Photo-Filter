@@ -1,10 +1,8 @@
 package com.tianzl.photofilter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
@@ -15,10 +13,10 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -49,16 +47,12 @@ import com.tianzl.photofilter.utisl.Constants;
 import com.tianzl.photofilter.utisl.DataUtils;
 import com.tianzl.photofilter.utisl.DisplayUtils;
 import com.tianzl.photofilter.utisl.FilterUtils;
-import com.tianzl.photofilter.utisl.ImageUtil;
 import com.tianzl.photofilter.utisl.TimeUtils;
 import com.tianzl.photofilter.utisl.UriUtils;
 import com.tianzl.photofilter.utisl.ViewUtils;
 
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
 
@@ -99,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements
     private int rootWidth;
     private int rootHeight;
     private TextInfo textInfo;
+    private RecyclerView rvFrame;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -180,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements
      * 初始化View
      */
     private void initView() {
+        rvFrame= (RecyclerView) findViewById(R.id.main_ll_Frame);
         tvInsert= (MoveTextView) findViewById(R.id.main_insert_text);
         rlRoot= (RelativeLayout) findViewById(R.id.main_root);
         rvPaintSize = (RecyclerView) findViewById(R.id.main_paint_size_rv);

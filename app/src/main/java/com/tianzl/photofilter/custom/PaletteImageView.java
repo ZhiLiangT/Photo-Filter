@@ -267,8 +267,14 @@ public class PaletteImageView extends SimpleDraweeView {
         Paint paint=new Paint();
         paint.setColor(color);
         paint.setTextSize(size);
-        paint.setTypeface(Typeface.createFromAsset(context.getAssets(),font));
-        canvas.drawText(content,x,y,paint);
+        if (font!=null&&!font.equals("")){
+            paint.setTypeface(Typeface.createFromAsset(context.getAssets(),font));
+        }
+        if (canvas==null){
+            initBuffer();
+        }else {
+            canvas.drawText(content,x,y,paint);
+        }
 
     }
 
